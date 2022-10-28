@@ -1,0 +1,40 @@
+.navbar {
+  display: flex;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e4e2e0;
+  width: 100%;
+  height: 60px;
+  padding: 10px !important;
+}
+
+.nav-left {
+  display: flex;
+  flex: 33%;
+  height: 100%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  font-weight: bold;
+  font-size: larger;
+}
+
+.nav-center {
+  display: flex;
+  flex: 33%;
+  height: 100%;
+  background-color: aquamarine;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-right {
+  display: flex;
+  flex: 33%;
+  height: 100%;
+  background-color: beige;
+  justify-content: flex-end;
+  align-items: center;
+}
