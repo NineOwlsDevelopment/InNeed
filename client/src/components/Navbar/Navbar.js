@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import AppContext from "../../context/context";
 import "./Navbar.css";
 
@@ -16,12 +17,22 @@ export default function Navbar() {
   return (
     <div className="navbar">
       <div className="nav-left">
-        <div className="brand">inNeed</div>
+        <div className="brand">
+          <Link to={"/"}>inNeed</Link>
+        </div>
       </div>
-      <div className="nav-center">
-        <button onClick={() => handleButton()}>Click</button>
+      <div className="nav-center"></div>
+      <div className="nav-right">
+        <div className="login">
+          <Link to={"/login"}>Log In</Link>
+        </div>
+
+        <div className="register">
+          <Link to={"/register"}>
+            <button>Sign Up</button>
+          </Link>
+        </div>
       </div>
-      <div className="nav-right"></div>
     </div>
   );
 }

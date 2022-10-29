@@ -8,7 +8,17 @@ exports.login = async (req, res) => {
   try {
     let { email, password } = sanitize(req.body);
 
+    if (!email || !password) {
+      return res.status(400).send({ error: "All fields are required." });
+    }
+
     let user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(400)
+        .send({ error: "Invalid email/password combination." });
+    }
 
     let isValidPw = await bcrypt.compare(password.toString(), user.password);
 
@@ -31,16 +41,16 @@ exports.register = async (req, res) => {
       req.body
     );
 
+    if (!email || !password || !confirmPassword || !firstName || !lastName) {
+      return res.status(400).send({ error: "All fields are required." });
+    }
+
     const userExist = await User.findOne({ email });
 
     if (userExist) {
       return res
         .status(400)
         .send({ error: "An account with that email already exist." });
-    }
-
-    if (!email || !password || !confirmPassword || !firstName || !lastName) {
-      return res.status(400).send({ error: "All fields are required." });
     }
 
     if (!validator.isEmail(email)) {
@@ -64,7 +74,14 @@ exports.register = async (req, res) => {
 
     await user.save();
 
-    res.send(user);
+    let userDetails = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      uuid: user.uuid,
+    };
+
+    res.send(userDetails);
   } catch (e) {
     console.log(e.message);
     return res.status(400).send({ error: e.message });

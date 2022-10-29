@@ -2,6 +2,7 @@ require("dotenv").config();
 require("./db/mongoose");
 
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const server = require("http").createServer(app);
 const WebSocket = require("ws");
@@ -9,7 +10,34 @@ const wss = new WebSocket.Server({ server });
 
 const user = require("./routes/user");
 
-const PORT = 5000;
+// CORS Config
+if (process.env.NODE_ENV === "production") {
+  app.use(
+    cors({
+      origin: [
+        process.env.PRODUCTION_URL,
+        process.env.SOCKET_PRODUCTION_URL,
+        process.env.CNAME_URL,
+      ],
+      credentials: true,
+    })
+  );
+} else {
+  app.use(
+    cors({
+      origin: [
+        `http://localhost:3000`,
+        `http://127.0.0.1:3000`,
+        "ws://localhost:3000",
+        "ws://127.0.0.1:3000",
+      ],
+      credentials: true,
+      contentType: "*",
+    })
+  );
+}
+
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
