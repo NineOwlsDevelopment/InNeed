@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import AppContext from "../../context/context";
-import "./Register.css";
 import axios from "axios";
 
 export default function Register() {

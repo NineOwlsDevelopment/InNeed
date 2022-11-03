@@ -21,9 +21,11 @@ export default function Login() {
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/api/user/login`, loginData, {
         withCredentials: true,
+        credentials: "include",
       })
       .then((res) => {
-        console.log(res);
+        console.log(res.data.user);
+        setUser(user);
       })
       .catch((e) => {
         console.log(e.response.data.error);

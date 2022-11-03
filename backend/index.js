@@ -2,13 +2,23 @@ require("dotenv").config();
 require("./db/mongoose");
 
 const express = require("express");
-const cors = require("cors");
 const app = express();
 const server = require("http").createServer(app);
+
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+
 const WebSocket = require("ws");
 const wss = new WebSocket.Server({ server });
 
-const user = require("./routes/user");
+app.use(cookieParser());
+app.use(express.json());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 
 // CORS Config
 if (process.env.NODE_ENV === "production") {
@@ -39,13 +49,11 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000;
 
-app.use(express.json());
+const user = require("./routes/user");
 
 app.use("/api/user", user);
 
 wss.on("connection", (ws) => {
-  console.log("New user");
-
   ws.on("message", (msg) => {
     msg = JSON.parse(msg);
 

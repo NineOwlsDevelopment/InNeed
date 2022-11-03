@@ -4,7 +4,10 @@ import AppContext from "./context";
 export default function AppState(props) {
   const [socket, setSocket] = useState({});
   const [user, setUser] = useState({
-    username: null,
+    firstName: null,
+    lastName: null,
+    email: null,
+    uuid: null,
   });
 
   useEffect(() => {
