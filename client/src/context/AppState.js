@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import AppContext from "./context";
+import { userReducer, USER_STATE } from "./userReducer";
 
 export default function AppState(props) {
+  const [isAuth, setIsAuth] = useReducer(userReducer, USER_STATE);
   const [socket, setSocket] = useState({});
   const [user, setUser] = useState({
-    firstName: null,
-    lastName: null,
-    email: null,
-    uuid: null,
+    isAuth: localStorage.getItem("isAuth"),
+    firstName: "",
+    lastName: "",
+    email: "",
+    uuid: "",
   });
 
   useEffect(() => {
@@ -21,6 +24,8 @@ export default function AppState(props) {
         user,
         setUser,
         socket,
+        isAuth,
+        setIsAuth,
       }}
     >
       {props.children}

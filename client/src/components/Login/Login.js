@@ -1,12 +1,20 @@
 import { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../../context/context";
 import "./Login.css";
 import axios from "axios";
 
 export default function Login() {
-  const { user, setUser, socket } = useContext(AppContext);
+  const navigate = useNavigate();
+  const { user, setUser, socket, setIsAuth } = useContext(AppContext);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (user.isAuth) {
+      navigate("/");
+    }
+  }, [user]);
+
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -24,11 +32,11 @@ export default function Login() {
         credentials: "include",
       })
       .then((res) => {
-        console.log(res.data.user);
-        setUser(user);
+        setUser(res.data.user);
+        setIsAuth({ type: "LOGIN", payload: res.data.user });
       })
       .catch((e) => {
-        console.log(e.response.data.error);
+        setIsAuth({ type: "ERROR" });
         setError(e.response.data.error);
       });
   };
@@ -66,6 +74,7 @@ export default function Login() {
           <button onClick={handleSubmitButton} className="login-button">
             Login
           </button>
+          {user.firstName}
         </div>
 
         <div className="is-not">

@@ -1,11 +1,18 @@
 import { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../../context/context";
 import axios from "axios";
 
 export default function Register() {
-  const { user, setUser, socket } = useContext(AppContext);
+  const navigate = useNavigate();
+  const { user, setUser, socket, setIsAuth } = useContext(AppContext);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (user.isAuth) {
+      navigate("/");
+    }
+  }, [user]);
 
   const [registerData, setLoginData] = useState({
     email: "",
@@ -31,7 +38,8 @@ export default function Register() {
         }
       )
       .then((res) => {
-        console.log(res);
+        setUser(res.data.user);
+        setIsAuth({ type: "LOGIN", payload: res.data.user });
       })
       .catch((e) => {
         console.log(e.response.data.error);

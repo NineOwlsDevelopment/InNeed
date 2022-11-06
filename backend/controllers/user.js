@@ -48,6 +48,7 @@ exports.login = async (req, res) => {
         });
 
         user = {
+          isAuth: true,
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
@@ -93,7 +94,7 @@ exports.register = async (req, res) => {
 
     let hashedPW = await bcrypt.hash(password.toString(), 8);
 
-    const user = new User({
+    let user = new User({
       firstName,
       lastName,
       email,
@@ -104,14 +105,33 @@ exports.register = async (req, res) => {
 
     await user.save();
 
-    let userDetails = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      uuid: user.uuid,
-    };
+    jwt.sign(
+      { id: user.uuid },
+      process.env.jwtsecret,
+      {
+        expiresIn: "24h",
+      },
+      (err, token) => {
+        if (err) {
+          return res.status(400).send({ error: "InvalidCredentials" });
+        }
 
-    res.send(userDetails);
+        res.cookie(process.env.TOKEN_PSUEDO_NAME, token, {
+          secure: process.env.NODE_ENV !== "development",
+        });
+
+        user = {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          uuid: user.uuid,
+        };
+
+        return res.status(200).send({
+          user,
+        });
+      }
+    );
   } catch (e) {
     console.log(e.message);
     return res.status(400).send({ error: e.message });
