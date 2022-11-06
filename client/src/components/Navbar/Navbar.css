@@ -19,7 +19,7 @@
 .brand {
   display: flex;
   font-weight: bold;
-  font-size: larger;
+  font-size: x-large;
   color: #15a800;
   cursor: pointer;
 }

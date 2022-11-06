@@ -106,14 +106,16 @@ const JobSection = styled.div`
   display: flex;
   flex-direction: row;
   width: 75%;
-  height: 300px;
+  height: fit-content;
+  gap: 20px;
 `;
 
 const JobPostings = styled.div`
   display: flex;
+  flex-direction: column;
+  gap: 10px;
   flex: 50%;
-  background-color: #a3a3a3;
-  height: 300px;
+  height: fit-content;
 `;
 
 const JobDetails = styled.div`
@@ -162,7 +164,11 @@ export default function Home() {
       </LowerBanner>
 
       <JobSection>
-        <JobPostings></JobPostings>
+        <JobPostings>
+          <JobListing />
+
+          <JobListing />
+        </JobPostings>
 
         <JobDetails></JobDetails>
       </JobSection>
