@@ -123,6 +123,10 @@ const JobDetails = styled.div`
   flex: 50%;
   background-color: #e3e3e3;
   height: 300px;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export default function Home() {
@@ -163,15 +167,25 @@ export default function Home() {
         </Box>
       </LowerBanner>
 
-      <JobSection>
-        <JobPostings>
-          <JobListing />
+      {currentTab === 1 ? (
+        <>
+          <div>
+            <span>Recent Searches</span>
+          </div>
+        </>
+      ) : (
+        <>
+          <JobSection>
+            <JobPostings>
+              <JobListing />
 
-          <JobListing />
-        </JobPostings>
+              <JobListing />
+            </JobPostings>
 
-        <JobDetails></JobDetails>
-      </JobSection>
+            <JobDetails></JobDetails>
+          </JobSection>
+        </>
+      )}
     </Wrapper>
   );
 }

@@ -49,10 +49,14 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000;
 
+// Routes
 const user = require("./routes/user");
+const job = require("./routes/job");
 
 app.use("/api/user", user);
+app.use("/api/job", job);
 
+// Websocket
 wss.on("connection", (ws) => {
   ws.on("message", (msg) => {
     msg = JSON.parse(msg);
@@ -63,6 +67,7 @@ wss.on("connection", (ws) => {
   });
 });
 
+// Start server
 server.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`);
 });

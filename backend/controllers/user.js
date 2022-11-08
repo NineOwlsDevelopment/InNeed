@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const sanitize = require("mongo-sanitize");
 const { v4: uuidv4 } = require("uuid");
 
+// access - Public
+// endpoint -  /api/user/login
 exports.login = async (req, res) => {
   try {
     let { email, password } = sanitize(req.body);
@@ -66,6 +68,8 @@ exports.login = async (req, res) => {
   }
 };
 
+// access - Public
+// endpoint -  /api/user/register
 exports.register = async (req, res) => {
   try {
     let { email, password, confirmPassword, firstName, lastName } = sanitize(
@@ -138,6 +142,8 @@ exports.register = async (req, res) => {
   }
 };
 
+// access - Public
+// endpoint -  /api/user/:id
 exports.getUser = async (req, res) => {
   try {
     res.send({ data: "Logged out" });
