@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import JobListing from "../JobListing/JobListing";
+import axios from "axios";
+import JobDetails from "../JobDetails/JobDetails";
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,7 +32,7 @@ const LowerBanner = styled.div`
   gap: 40px;
 `;
 
-const Search = styled.div`
+const SearchForm = styled.form`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -118,11 +120,13 @@ const JobPostings = styled.div`
   height: fit-content;
 `;
 
-const JobDetails = styled.div`
-  display: flex;
+const Details = styled.div`
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
   flex: 50%;
-  background-color: #e3e3e3;
   height: 300px;
+  padding: 10px;
 
   @media (max-width: 768px) {
     display: none;
@@ -131,25 +135,68 @@ const JobDetails = styled.div`
 
 export default function Home() {
   const [currentTab, setCurrentTab] = useState(0);
+  const [jobMatches, setJobMatches] = useState([]);
+  const [selectedJob, setSelectedJob] = useState("");
+  const [searchInput, setSearchInput] = useState({
+    profession: "",
+    location: "",
+  });
+
+  const handleSearchUpdate = (e) => {
+    const { name, value } = e.target;
+    setSearchInput((prevValue) => ({ ...prevValue, [name]: value }));
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+
+    if (!searchInput.profession && !searchInput.location) {
+      console.log("Enter a job title or location to start a search");
+      return;
+    }
+
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/api/job/find`, searchInput, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setJobMatches(res.data.message);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
     <Wrapper>
       <Banner>
-        <Search>
+        <SearchForm onSubmit={handleSearchSubmit}>
           <Box>
             <Label>What</Label>
-            <Input placeholder="Job title, keywords, or company" />
+            <Input
+              autoComplete="off"
+              name={"profession"}
+              value={searchInput.profession}
+              onChange={handleSearchUpdate}
+              placeholder="Job title, keywords, or company"
+            />
           </Box>
 
           <Box>
             <Label>Where</Label>
-            <Input placeholder="City, state, or zip code" />
+            <Input
+              autoComplete="off"
+              name={"location"}
+              value={searchInput.location}
+              onChange={handleSearchUpdate}
+              placeholder="City, state, or zip code"
+            />
           </Box>
 
           <Box>
             <Button>Find Work</Button>
           </Box>
-        </Search>
+        </SearchForm>
         Employers: post a job – your next hire is here
       </Banner>
 
@@ -177,12 +224,27 @@ export default function Home() {
         <>
           <JobSection>
             <JobPostings>
-              <JobListing />
-
-              <JobListing />
+              {jobMatches.map((job) => (
+                <div onClick={() => setSelectedJob(job.uuid)}>
+                  <JobListing
+                    key={job.uuid}
+                    title={job.title}
+                    company={job.company}
+                    city={job.city}
+                    state={job.state}
+                    salaryLow={job.salaryLow}
+                    salaryHigh={job.salaryHigh}
+                    jobType={job.jobType}
+                    description={job.description}
+                    uuid={job.uuid}
+                  />
+                </div>
+              ))}
             </JobPostings>
 
-            <JobDetails></JobDetails>
+            <Details>
+              <JobDetails uuid={selectedJob} />
+            </Details>
           </JobSection>
         </>
       )}

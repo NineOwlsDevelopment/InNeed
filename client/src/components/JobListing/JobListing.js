@@ -99,43 +99,68 @@ const Description = styled.span`
   padding: 10px;
 `;
 
-export default function JobListing() {
+export default function JobListing(props) {
   return (
-    <>
-      <Box>
-        <ListingLeft>
-          <Header>
-            <Title>Front End Web Developer</Title>
-            <Company>inNeed</Company>
-            <Location>Houston, TX</Location>
-          </Header>
+    <Box>
+      <ListingLeft>
+        <Header>
+          <Title>
+            {props.title
+              .toLowerCase()
+              .split(" ")
+              .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+              .join(" ")}
+          </Title>
 
-          <SubHeader>
-            <Salary>
-              <PaymentsIcon sx={{ fontSize: "medium" }} /> $80,000 - $90,000 per
-              year
-            </Salary>
+          <Company>
+            {props.company
+              .toLowerCase()
+              .split(" ")
+              .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+              .join(" ")}
+          </Company>
 
-            <JobType>Full-time</JobType>
-          </SubHeader>
+          <Location>
+            {props.city
+              .toLowerCase()
+              .split(" ")
+              .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+              .join(" ")}
+            ,{" "}
+            {props.state
+              .toLowerCase()
+              .split(" ")
+              .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+              .join(" ")}
+          </Location>
+        </Header>
 
-          <Body>
-            <Description>
-              <LinesEllipsis
-                text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                maxLine="15"
-                ellipsis="..."
-                trimRight
-                basedOn="letters"
-              />
-            </Description>
-          </Body>
-        </ListingLeft>
+        <SubHeader>
+          <Salary>
+            <PaymentsIcon sx={{ fontSize: "medium" }} /> $
+            {props.salaryLow.toLocaleString()} - $
+            {props.salaryHigh.toLocaleString()} per year
+          </Salary>
 
-        <ListingRight>
-          <FavoriteBorderIcon />
-        </ListingRight>
-      </Box>
-    </>
+          <JobType>{props.jobType}</JobType>
+        </SubHeader>
+
+        <Body>
+          <Description>
+            <LinesEllipsis
+              text={props.description}
+              maxLine="15"
+              ellipsis="..."
+              trimRight
+              basedOn="letters"
+            />
+          </Description>
+        </Body>
+      </ListingLeft>
+
+      <ListingRight>
+        <FavoriteBorderIcon />
+      </ListingRight>
+    </Box>
   );
 }

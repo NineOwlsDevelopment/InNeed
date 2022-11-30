@@ -21,7 +21,7 @@ router.post("/find", findJob);
 // access - Public
 // endpoint -  /api/job/find
 // description - Lets user find specific job
-router.post("/find/:id", findJobById);
+router.get("/find/:uuid", findJobById);
 
 // access - Private
 // endpoint -  /api/job/update/:id

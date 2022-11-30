@@ -26,7 +26,6 @@ const skillSchema = new mongoose.Schema(
     uuid: {
       type: String,
       required: true,
-      unique: true,
     },
   },
   options
